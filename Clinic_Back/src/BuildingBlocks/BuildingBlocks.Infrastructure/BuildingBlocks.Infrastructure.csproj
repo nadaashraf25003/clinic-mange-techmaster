@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.12">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj" />
+    <ProjectReference Include="..\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
+    <ProjectReference Include="..\..\Modules\Departments\Departments.Domain\Departments.Domain.csproj" />
+    <ProjectReference Include="..\..\Modules\Doctors\Doctors.Domain\Doctors.Domain.csproj" />
+    <ProjectReference Include="..\..\Modules\Patients\Patients.Domain\Patients.Domain.csproj" />
+    <ProjectReference Include="..\..\Modules\Appointments\Appointments.Domain\Appointments.Domain.csproj" />
+    <ProjectReference Include="..\..\Modules\MedicalRecords\MedicalRecords.Domain\MedicalRecords.Domain.csproj" />
+    <ProjectReference Include="..\..\Modules\Billing\Billing.Domain\Billing.Domain.csproj" />
+    <ProjectReference Include="..\..\Modules\Administration\Administration.Domain\Administration.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

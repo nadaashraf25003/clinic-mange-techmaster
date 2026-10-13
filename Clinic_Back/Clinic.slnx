@@ -1,0 +1,47 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/BuildingBlocks/">
+    <Project Path="src/BuildingBlocks/BuildingBlocks.Application/BuildingBlocks.Application.csproj" />
+    <Project Path="src/BuildingBlocks/BuildingBlocks.Domain/BuildingBlocks.Domain.csproj" />
+    <Project Path="src/BuildingBlocks/BuildingBlocks.Infrastructure/BuildingBlocks.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Host/">
+    <Project Path="src/Host/Clinic.Api/Clinic.Api.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/" />
+  <Folder Name="/src/Modules/Administration/">
+    <Project Path="src/Modules/Administration/Administration.Application/Administration.Application.csproj" />
+    <Project Path="src/Modules/Administration/Administration.Domain/Administration.Domain.csproj" />
+    <Project Path="src/Modules/Administration/Administration.Infrastructure/Administration.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Appointments/">
+    <Project Path="src/Modules/Appointments/Appointments.Application/Appointments.Application.csproj" />
+    <Project Path="src/Modules/Appointments/Appointments.Domain/Appointments.Domain.csproj" />
+    <Project Path="src/Modules/Appointments/Appointments.Infrastructure/Appointments.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Billing/">
+    <Project Path="src/Modules/Billing/Billing.Application/Billing.Application.csproj" />
+    <Project Path="src/Modules/Billing/Billing.Domain/Billing.Domain.csproj" />
+    <Project Path="src/Modules/Billing/Billing.Infrastructure/Billing.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Departments/">
+    <Project Path="src/Modules/Departments/Departments.Application/Departments.Application.csproj" />
+    <Project Path="src/Modules/Departments/Departments.Domain/Departments.Domain.csproj" />
+    <Project Path="src/Modules/Departments/Departments.Infrastructure/Departments.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Doctors/">
+    <Project Path="src/Modules/Doctors/Doctors.Application/Doctors.Application.csproj" />
+    <Project Path="src/Modules/Doctors/Doctors.Domain/Doctors.Domain.csproj" />
+    <Project Path="src/Modules/Doctors/Doctors.Infrastructure/Doctors.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/MedicalRecords/">
+    <Project Path="src/Modules/MedicalRecords/MedicalRecords.Application/MedicalRecords.Application.csproj" />
+    <Project Path="src/Modules/MedicalRecords/MedicalRecords.Domain/MedicalRecords.Domain.csproj" />
+    <Project Path="src/Modules/MedicalRecords/MedicalRecords.Infrastructure/MedicalRecords.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Patients/">
+    <Project Path="src/Modules/Patients/Patients.Application/Patients.Application.csproj" />
+    <Project Path="src/Modules/Patients/Patients.Domain/Patients.Domain.csproj" />
+    <Project Path="src/Modules/Patients/Patients.Infrastructure/Patients.Infrastructure.csproj" />
+  </Folder>
+</Solution>
