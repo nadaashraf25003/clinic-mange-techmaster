@@ -1,167 +1,191 @@
-#  CareSync - Clinic Management Backend (.NET 10 / Clean Architecture & CQRS)
+# 🏥 CareSync - Clinic Management Backend (.NET 10 / Clean Architecture & CQRS)
 
-نظام وإطار العمل الخلفي (Backend) المتكامل لمنظومة إدارة العيادات والمراكز الطبية **CareSync**، مبني بأحدث معايير هندسة البرمجيات باستخدام **.NET 10**، ونمط **Modular Clean Architecture** مع **CQRS** و **MediatR** و **Minimal APIs** و **Entity Framework Core**.
+نظام وإطار العمل الخلفي المتكامل لمنظومة إدارة العيادات والمراكز الطبية **CareSync**، مبني بأحدث معايير هندسة البرمجيات باستخدام **.NET 10**، ونمط **Modular Clean Architecture** مع **CQRS** و **MediatR** و **Minimal APIs** و **Entity Framework Core** وقاعدة بيانات **Microsoft SQL Server**.
 
 ---
 
-##  البنية المعمارية (Solution Architecture)
+## 🌐 روابط الإنتاج الحية (Live Production URLs)
 
-تم تقسيم المشروع إلى **25 مشروعاً** بنمط الموديلات المعيارية المستقلة (Modular Monolith):
+* 🚀 **رابط الباك إند المباشر (Production API)**:  
+  [https://tech-master-clinic-management.runasp.net/](https://tech-master-clinic-management.runasp.net/)
+* 📑 **توثيق الواجهة التفاعلي (Swagger UI)**:  
+  [https://tech-master-clinic-management.runasp.net/swagger](https://tech-master-clinic-management.runasp.net/swagger)
+* 🔗 **مسار الـ API الموحد (Base Prefix)**:  
+  `https://tech-master-clinic-management.runasp.net/clinic`
+
+---
+
+## 🏛️ البنية المعمارية (Solution Architecture)
+
+تم تقسيم الحل إلى **25 مشروعاً** بنمط الموديلات المعمارية المستقلة (Modular Monolith):
 
 ```text
 Clinic_Back/
-├── Clinic.sln                               # ملف الحل الرئيسي
+├── Clinic.slnx                               # ملف الحل البرمجي (.NET Solution)
+├── MonsterASP_CareSync_Database.sql          # سكريبت تهيئة وهيكلة قاعدة بيانات SQL Server
 └── src/
-    ├── BuildingBlocks/                      # المشتركات الأساسية المعمارية
-    │   ├── BuildingBlocks.Domain/           # Entity, AuditableEntity, Result<T>, Error, IDomainEvent
-    │   ├── BuildingBlocks.Application/      # CQRS (ICommand, IQuery, ICommandHandler), Pipeline Behaviors
-    │   └── BuildingBlocks.Infrastructure/   # ClinicDbContext, SeedData, AuditableEntityInterceptor
+    ├── BuildingBlocks/                       # المشتركات الأساسية المعمارية
+    │   ├── BuildingBlocks.Domain/            # Entity, AuditableEntity, Result<T>, Error, IDomainEvent
+    │   ├── BuildingBlocks.Application/       # CQRS (ICommand, IQuery, ICommandHandler), Pipeline Behaviors
+    │   └── BuildingBlocks.Infrastructure/    # ClinicDbContext, SeedData, AuditableEntityInterceptor
     │
     ├── Host/
-    │   └── Clinic.Api/                      # تطبيق ومسارات الـ Minimal APIs المجمعة
-    │       ├── Endpoints/                   # جميع نقاط النهاية المجمعة تبدأ بـ /clinic/...
-    │       │   ├── AuthEndpoints.cs         # /clinic/auth/...
-    │       │   ├── DepartmentEndpoints.cs   # /clinic/departments/...
-    │       │   ├── DoctorEndpoints.cs       # /clinic/doctors/...
-    │       │   ├── PatientEndpoints.cs      # /clinic/patients/...
-    │       │   ├── AppointmentEndpoints.cs  # /clinic/appointments/...
-    │       │   ├── MedicalRecordEndpoints.cs# /clinic/medical-records/...
-    │       │   ├── FinanceEndpoints.cs      # /clinic/finances/...
-    │       │   └── AdminEndpoints.cs        # /clinic/admin/...
+    │   └── Clinic.Api/                       # تطبيق ومسارات الـ Minimal APIs المجمعة
+    │       ├── Endpoints/                    # نقاط النهاية (Endpoints) لجميع الوحدات
+    │       │   ├── AuthEndpoints.cs          # /clinic/auth/...
+    │       │   ├── DepartmentEndpoints.cs    # /clinic/departments/...
+    │       │   ├── DoctorEndpoints.cs        # /clinic/doctors/...
+    │       │   ├── PatientEndpoints.cs       # /clinic/patients/...
+    │       │   ├── AppointmentEndpoints.cs   # /clinic/appointments/...
+    │       │   ├── MedicalRecordEndpoints.cs # /clinic/medical-records/...
+    │       │   ├── FinanceEndpoints.cs       # /clinic/finances/...
+    │       │   └── AdminEndpoints.cs         # /clinic/admin/...
     │       │
-    │       ├── Middleware/                  # ExceptionHandlingMiddleware, RequestLoggingMiddleware
-    │       ├── Program.cs                   # إعداد حقن التبعيات (DI)، الـ CORS، و Swagger
-    │       └── appsettings.json             # نصوص الاتصال بقاعدة البيانات
+    │       ├── Middleware/                   # ExceptionHandlingMiddleware, RequestLoggingMiddleware
+    │       ├── Properties/PublishProfiles/   # إعدادات النشر السحابي (WebDeploy)
+    │       ├── Program.cs                    # إعداد حقن التبعيات (DI)، الـ CORS، و Swagger
+    │       └── appsettings.json              # نصوص الاتصال بقاعدة البيانات
     │
-    └── Modules/                             # الوحدات الوظيفية المستقلة
-        ├── Departments/                     # وحدة الأقسام والعيادات المتخصصة
-        ├── Doctors/                         # وحدة الأطباء وإدارة الطابور والأتعاب
-        ├── Patients/                        # وحدة بوابة وسجلات ومؤشرات المرضى
-        ├── Appointments/                    # وحدة الحجوزات والمواعيد
-        ├── MedicalRecords/                  # وحدة الروشتات والتحاليل والملاحظات الطبية
-        ├── Billing/                         # وحدة الفواتير والمطالبات التأمينية والإيرادات
-        └── Administration/                  # وحدة المشرف وسجل العمليات والإحصائيات
+    └── Modules/                              # الوحدات الوظيفية المستقلة
+        ├── Departments/                      # وحدة الأقسام والعيادات المتخصصة
+        ├── Doctors/                          # وحدة الأطباء وإدارة الطابور والأتعاب
+        ├── Patients/                         # وحدة بوابة وسجلات ومؤشرات المرضى
+        ├── Appointments/                     # وحدة الحجوزات والمواعيد
+        ├── MedicalRecords/                   # وحدة الروشتات والتحاليل والملاحظات الطبية
+        ├── Billing/                          # وحدة الفواتير والمطالبات التأمينية والإيرادات
+        └── Administration/                   # وحدة المشرف وسجل العمليات والإحصائيات
 ```
 
 ---
 
-##  دليل نقاط النهاية (API Endpoints Catalog)
+## 📚 دليل نقاط النهاية (API Endpoints Catalog)
 
-جميع نقاط النهاية تبدأ بـ **/clinic/...**:
+جميع مسارات الـ API تبدأ بالبادئة الموحدة: `https://tech-master-clinic-management.runasp.net/clinic`
 
-### 1.  الأقسام والعيادات (`/clinic/departments`)
+### 1. 🔐 تسجيل الدخول والمصادقة (`/clinic/auth`)
 | Method | Endpoint | الوصف |
 |---|---|---|
-| `GET` | `/clinic/departments` | عرض جميع الأقسام الطبية والعيادات المتخصصة |
-| `GET` | `/clinic/departments/{id}` | عرض تفاصيل قسم طبي محدد |
+| `GET` | `/clinic/auth/patient/check?identifier=...` | التحقق من وجود حساب مريض برقم الهاتف أو البريد |
+| `POST` | `/clinic/auth/patient/login` | تسجيل دخول المريض |
+| `POST` | `/clinic/auth/patient/register` | إنشاء حساب مريض جديد مع الملف الطبي الأولي |
+| `POST` | `/clinic/auth/doctor/login` | تسجيل دخول الطبيب برقم الهوية وكلمة المرور |
+| `POST` | `/clinic/auth/admin/login` | تسجيل دخول المشرف برمز الأمان (PIN) |
+
+---
+
+### 2. 🏥 الأقسام والعيادات (`/clinic/departments`)
+| Method | Endpoint | الوصف |
+|---|---|---|
+| `GET` | `/clinic/departments` | استرجاع جميع الأقسام الطبية والعيادات المتخصصة |
+| `GET` | `/clinic/departments/{id}` | استرجاع تفاصيل قسم طبي محدد |
 | `POST` | `/clinic/departments` | إضافة قسم أو عيادة جديدة |
 | `PUT` | `/clinic/departments/{id}` | تعديل بيانات قسم طبي |
 | `DELETE` | `/clinic/departments/{id}` | حذف قسم طبي |
 
 ---
 
-### 2.  الأطباء والاستشاريين (`/clinic/doctors`)
+### 3. 👨‍⚕️ الأطباء والاستشاريين (`/clinic/doctors`)
 | Method | Endpoint | الوصف |
 |---|---|---|
-| `GET` | `/clinic/doctors` | عرض قائمة الأطباء مع إمكانية الفلترة (`?departmentId=...&search=...`) |
-| `GET` | `/clinic/doctors/{id}` | عرض الملف التعريفي الكامل للطبيب |
-| `GET` | `/clinic/doctors/{id}/queue` | عرض طابور الانتظار وحالات المرضى لليوم الحالي |
-| `GET` | `/clinic/doctors/{id}/finances` | عرض إحصائيات الدخل المالي وجلسات الكشف |
-| `POST` | `/clinic/doctors` | إضافة طبيب جديد إلى المنظومة الطبية |
-| `PUT` | `/clinic/doctors/{id}` | تعديل بيانات وملف الطبيب |
+| `GET` | `/clinic/doctors` | استرجاع قائمة الأطباء مع الفلترة بالقسم أو البحث (`?departmentId=...&search=...`) |
+| `GET` | `/clinic/doctors/{id}` | عرض الملف التعريفي الكامل للطبيب وساعات العمل وسعر الكشف |
+| `GET` | `/clinic/doctors/{id}/queue` | استرجاع طابور انتظار المرضى لليوم الحالي وحالاتهم |
+| `GET` | `/clinic/doctors/{id}/finances` | استرجاع إحصائيات الدخل المالي ونسب الاستشارة |
+| `POST` | `/clinic/doctors` | إضافة طبيب جديد للمنظومة |
+| `PUT` | `/clinic/doctors/{id}` | تحديث بيانات الطبيب |
 | `PUT` | `/clinic/doctors/{id}/toggle-status` | تفعيل أو تعطيل حساب الطبيب |
 | `PUT` | `/clinic/doctors/{id}/fee` | تحديث سعر كشف الطبيب |
 | `DELETE` | `/clinic/doctors/{id}` | حذف طبيب من المنظومة |
 
 ---
 
-### 3.  بوابة وملف المريض (`/clinic/patients`)
+### 4. 🧑‍🤝‍🧑 بوابة وملف المريض (`/clinic/patients`)
 | Method | Endpoint | الوصف |
 |---|---|---|
-| `GET` | `/clinic/patients/me` | عرض الملف الطبي والبيانات الشخصية للمريض الحالي |
-| `PUT` | `/clinic/patients/me` | تحديث الملف الطبي والبيانات الشخصية للمريض |
-| `GET` | `/clinic/patients/me/vitals` | عرض سجل المؤشرات الحيوية وضغط الدم والسكر |
+| `GET` | `/clinic/patients/me` | استرجاع الملف الطبي والبيانات الشخصية للمريض |
+| `PUT` | `/clinic/patients/me` | تحديث الملف الطبي للمريض (فصيلة الدم، الحساسية، الأمراض المزمنة) |
+| `GET` | `/clinic/patients/me/vitals` | استرجاع سجل المؤشرات الحيوية (الضغط، السكر، النبض، الحرارة) |
 | `POST` | `/clinic/patients/me/vitals` | تسجيل قياس مؤشرات حيوية جديدة للمريض |
-| `GET` | `/clinic/patients/me/notifications` | عرض الإشعارات وتنبيهات المواعيد والتحاليل |
-| `PUT` | `/clinic/patients/me/notifications/{id}/read` | تحديد إشعار كمقروء |
+| `GET` | `/clinic/patients/me/notifications` | استرجاع تنبيهات المواعيد وجاهزية التحاليل |
+| `PUT` | `/clinic/patients/me/notifications/{id}/read` | تحديد إشعار محدد كمقروء |
 | `PUT` | `/clinic/patients/me/notifications/read-all` | تحديد جميع الإشعارات كمقروءة |
 
 ---
 
-### 4.  حجوزات المواعيد (`/clinic/appointments`)
+### 5. 📅 حجوزات المواعيد (`/clinic/appointments`)
 | Method | Endpoint | الوصف |
 |---|---|---|
-| `GET` | `/clinic/appointments` | عرض المواعيد مع إمكانية الفلترة (`?patientId=...&doctorId=...&status=...&date=...`) |
-| `GET` | `/clinic/appointments/{id}` | عرض تفاصيل حجز موعد محدد |
-| `POST` | `/clinic/appointments/quick-book` | حجز موعد سريع من الصفحة الرئيسية للعيادة |
-| `POST` | `/clinic/appointments/book` | حجز موعد جديد من بوابة المريض أو لوحة الإدارة |
-| `POST` | `/clinic/appointments/{id}/cancel` | إلغاء حجز موعد مع تحديد السبب |
-| `POST` | `/clinic/appointments/{id}/reschedule` | تعديل تاريخ وتوقيت حجز موعد |
+| `GET` | `/clinic/appointments` | استرجاع قائمة المواعيد مع الفلترة (`?patientId=...&doctorId=...&status=...&date=...`) |
+| `GET` | `/clinic/appointments/{id}` | استرجاع تفاصيل موعد محدد ورقم الانتظار |
+| `POST` | `/clinic/appointments/quick-book` | حجز موعد سريع من واجهة الزوار الرئيسية |
+| `POST` | `/clinic/appointments/book` | حجز موعد كامل من بوابة المريض أو لوحة الإدارة |
+| `POST` | `/clinic/appointments/{id}/cancel` | إلغاء حجز موعد مع تدوين السبب |
+| `POST` | `/clinic/appointments/{id}/reschedule` | إعادة جدولة وتغيير توقيت الموعد |
 | `PUT` | `/clinic/appointments/{id}/status` | تحديث حالة الموعد (`upcoming`, `completed`, `cancelled`) |
 | `DELETE` | `/clinic/appointments/{id}` | حذف موعد من النظام |
 
 ---
 
-### 5.  السجلات والروشتات والتحاليل (`/clinic/medical-records`)
+### 6. 💊 السجلات الطبية والروشتات والتحاليل (`/clinic/medical-records`)
 | Method | Endpoint | الوصف |
 |---|---|---|
-| `GET` | `/clinic/medical-records/prescriptions` | عرض قائمة الروشتات الطبية مع الأدوية والجرعات |
-| `GET` | `/clinic/medical-records/prescriptions/{id}` | عرض تفاصيل روشتة طبية محددة |
-| `POST` | `/clinic/medical-records/prescriptions` | إصدار روشتة علاجية جديدة |
-| `GET` | `/clinic/medical-records/lab-reports` | عرض قائمة تقارير التحاليل الطبية والأشعة |
-| `GET` | `/clinic/medical-records/lab-reports/{id}` | عرض نتائج ومؤشرات تقرير معملي محدد |
-| `POST` | `/clinic/medical-records/consultations` | حفظ ملاحظات الكشف والتشخيص الطبي للطبيب |
+| `GET` | `/clinic/medical-records/prescriptions` | استرجاع الروشتات الطبية مع تفاصيل الأدوية والجرعات والتكرار |
+| `GET` | `/clinic/medical-records/prescriptions/{id}` | استرجاع تفاصيل روشتة إلكترونية محددة |
+| `POST` | `/clinic/medical-records/prescriptions` | إصدار روشتة طبية جديدة من قبل الطبيب |
+| `GET` | `/clinic/medical-records/lab-reports` | استرجاع تقارير التحاليل الطبية ونتائج الفحوصات |
+| `GET` | `/clinic/medical-records/lab-reports/{id}` | استرجاع تفاصيل ومرفقات تقرير تحليلي محدد |
+| `POST` | `/clinic/medical-records/consultations` | حفظ ملاحظات وتوصيات جلسة الكشف الطبي |
 
 ---
 
-### 6.  الفواتير والإيرادات (`/clinic/finances`)
+### 7. 💳 الفواتير والماليات (`/clinic/finances`)
 | Method | Endpoint | الوصف |
 |---|---|---|
-| `GET` | `/clinic/finances` | عرض السجلات المالية وفواتير المرضى والمطالبات التأمينية |
-| `POST` | `/clinic/finances` | إصدار فاتورة أو سند مالي جديد |
+| `GET` | `/clinic/finances` | استرجاع السجلات المالية والفواتير والمطالبات التأمينية |
+| `POST` | `/clinic/finances` | إصدار فاتورة علاجية أو سند قبض جديد |
 
 ---
 
-### 7.  لوحة المشرف والإحصائيات (`/clinic/admin`)
+### 8. 📊 الإدارة العامة والإحصائيات (`/clinic/admin`)
 | Method | Endpoint | الوصف |
 |---|---|---|
-| `GET` | `/clinic/admin/profile` | عرض بيانات المدير الطبي والتنفيذي |
-| `GET` | `/clinic/admin/stats` | عرض المؤشرات الرئيسية وإحصائيات المنظومة الطبية |
-| `GET` | `/clinic/admin/activity-logs` | عرض سجل العمليات والأنشطة الإدارية في العيادة |
+| `GET` | `/clinic/admin/profile` | استرجاع بيانات المشرف الطبي |
+| `GET` | `/clinic/admin/stats` | استرجاع مؤشرات الأداء (إجمالي الإيرادات، المواعيد، الأطباء، ونسب الإشغال) |
+| `GET` | `/clinic/admin/activity-logs` | استرجاع سجل الأنشطة والعمليات الإدارية المنفذة |
 
 ---
 
-### 8.  تسجيل الدخول والمصادقة (`/clinic/auth`)
-| Method | Endpoint | الوصف |
-|---|---|---|
-| `POST` | `/clinic/auth/patient/login` | تسجيل دخول المريض برقم الهاتف أو البريد |
-| `POST` | `/clinic/auth/patient/register` | إنشاء حساب مريض جديد |
-| `POST` | `/clinic/auth/doctor/login` | تسجيل دخول الطبيب |
-| `POST` | `/clinic/auth/admin/login` | تسجيل دخول المشرف برقم PIN |
+## 🛠️ التقنيات والمكتبات المستخدمة (Technology Stack)
+
+* **.NET 10.0 SDK & C# 13**
+* **Entity Framework Core 10** مع **Microsoft SQL Server**
+* **MediatR** لتطبيق نمط **CQRS** وعزل استعلامات القراءة عن أوامر الكتابة
+* **FluentValidation** للتحقق الصارم من صحة البيانات داخل الـ Pipeline
+* **Result Pattern (`Result<T>`)** لإدارة الاستجابات والأخطاء بطريقة وظيفية نظيفة وموحدة
+* **Minimal APIs** لأعلى كفاءة وسرعة استجابة مع تقليل استهلاك الذاكرة
+* **Swashbuckle OpenAPI / Swagger UI** للتوثيق والاختبار الحي
+* **CORS Policy ("AllowAll")** مهيأة للاتصال المباشر مع واجهة الـ React المنشورة على Vercel
+* **SeedData Generator** لتعبئة قاعدة البيانات تلقائياً ببيانات افتراضية واقعية عند الإقلاع الأول
 
 ---
 
-##  التقنيات المستخدمة (Tech Stack)
+## 💻 التشغيل المحلي (Local Development)
 
-* **.NET 10.0 / C# 13**
-* **Entity Framework Core** مع SQLite (`clinic.db`) ودعم التهجيرات التلقائية
-* **MediatR & CQRS Pattern**
-* **FluentValidation** للتحقق التلقائي من صحة المدخلات داخل الـ Pipeline
-* **Result Monad Pattern (`Result<T>`)** لمعالجة الأخطاء بصورة وظيفية نظيفة
-* **Swashbuckle Swagger UI** للتوثيق التفاعلي
-* **CORS Policy** مهيأة للاتصال المباشر مع واجهة الـ React Vite
+### المتطلبات الأساسية
+* [.NET 10 SDK](https://dotnet.microsoft.com/)
+* SQL Server LocalDB أو مسار قاعدة بيانات SQL Server
 
----
-
-##  تشغيل الباك إند (How to Run)
-
+### خطوات التشغيل
 ```powershell
 # 1. الدخول إلى مجلد الباك إند
 cd Clinic_Back
 
-# 2. تشغيل السيرفر على المنفذ 5100
+# 2. استرجاع الحزم
+dotnet restore
+
+# 3. تشغيل الخادم المحلي على المنفذ 5100
 dotnet run --project src/Host/Clinic.Api/Clinic.Api.csproj --urls "http://localhost:5100"
 ```
 
-* **صفحة التوثيق التفاعلية (Swagger UI)**: [http://localhost:5100/swagger](http://localhost:5100/swagger)
-* **المسار الترحيبي والتأكد من الصحة**: [http://localhost:5100/](http://localhost:5100/)
+* **رابط Swagger المحلي**: [http://localhost:5100/swagger](http://localhost:5100/swagger)
+* **فحص الحالة (Health Check)**: [http://localhost:5100/](http://localhost:5100/)
