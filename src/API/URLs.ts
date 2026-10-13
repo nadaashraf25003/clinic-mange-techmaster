@@ -3,7 +3,10 @@
  * Base prefix: /clinic
  */
 
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://tech-master-clinic-management.runasp.net/clinic';
+const rawBaseUrl = import.meta.env.VITE_API_URL || 'https://tech-master-clinic-management.runasp.net/clinic';
+const sanitizedBaseUrl = rawBaseUrl.replace(/\/+$/, '');
+export const API_BASE_URL = sanitizedBaseUrl.endsWith('/clinic') ? sanitizedBaseUrl : `${sanitizedBaseUrl}/clinic`;
+
 
 export const API_URLS = {
   // 1. Auth & Authentication

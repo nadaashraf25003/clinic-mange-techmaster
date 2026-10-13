@@ -1,7 +1,9 @@
 /**
  * HTTP Client Wrapper configured for future ASP.NET Core Web API integration
  */
-export const BASE_API_URL = import.meta.env.VITE_API_URL || 'http://tech-master-clinic-management.runasp.net/clinic';
+import { API_BASE_URL } from './URLs';
+
+export const BASE_API_URL = API_BASE_URL;
 
 export const getAuthHeader = (): Record<string, string> => {
   const token = localStorage.getItem('token');
